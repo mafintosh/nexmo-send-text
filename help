@@ -1,0 +1,10 @@
+Usage: send-text [message...] [options]
+
+Options include:
+  --help,-h      prints this help
+  --from,-f      sender-of-text defaults to user@hostname
+  --to,-t        cell phone number of receiver [i.e. 4512345678]
+  --key,-k       your nexmo api key
+  --secret,-s    your nexmo api secret
+  --defaults,-d  save the current passed options as defaults
+

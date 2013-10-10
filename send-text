@@ -1,0 +1,51 @@
+#!/bin/bash
+
+. $(which bashkit)
+
+help () {
+	cat $DIRNAME/help
+	exit 1
+}
+
+opt --help,-h --key,-k --secret,-s --from,-f --to,-t --defaults,-d
+cmd () {
+	opt --help && help
+
+	[ -f ~/.send-text ] && . ~/.send-text
+
+	NOTIFY_FROM=${opt_from:-$NOTIFY_FROM}
+	NOTIFY_TO=${opt_to:-$NOTIFY_TO}
+	NOTIFY_KEY=${opt_key:-$NOTIFY_KEY}
+	NOTIFY_SECRET=${opt_secret:-$NOTIFY_SECRET}
+
+	[ "$NOTIFY_FROM" = "" ] && NOTIFY_FROM=$(echo "$(whoami)@$(hostname)" | sed 's/.local//' | head -c 11)
+
+	[ "$NOTIFY_FROM" = "" ]   && error --from required
+	[ "$NOTIFY_TO" = "" ]     && error --to required
+	[ "$NOTIFY_KEY" = "" ]    && error --key required
+	[ "$NOTIFY_SECRET" = "" ] && error --secret required
+
+	if opt --defaults; then
+		(
+			echo export NOTIFY_FROM=\"$NOTIFY_FROM\"
+			echo export NOTIFY_TO=\"$NOTIFY_TO\"
+			echo export NOTIFY_KEY=\"$NOTIFY_KEY\"
+			echo export NOTIFY_SECRET=\"$NOTIFY_SECRET\"
+		) > ~/.send-text
+
+		[ "$*" = "" ] && exit 0
+	fi
+
+	[ "$*" = "" ] && help
+
+	OUTPUT=$(curl -fs https://rest.nexmo.com/sms/json -G -X GET \
+		--data-urlencode "api_key=$NOTIFY_KEY" \
+		--data-urlencode "api_secret=$NOTIFY_SECRET" \
+		--data-urlencode "from=$NOTIFY_FROM" \
+		--data-urlencode "to=$NOTIFY_TO" \
+		--data-urlencode "text=$*")
+
+	echo $OUTPUT | grep "error-text" | sed 's/.*"error-text":"//' | sed 's/".*//'
+}
+
+run
