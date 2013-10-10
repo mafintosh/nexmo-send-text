@@ -18,7 +18,7 @@ cmd () {
 	NOTIFY_KEY=${opt_key:-$NOTIFY_KEY}
 	NOTIFY_SECRET=${opt_secret:-$NOTIFY_SECRET}
 
-	[ "$NOTIFY_FROM" = "" ] && NOTIFY_FROM=$(echo "$(whoami)@$(hostname)" | sed 's/.local//' | head -c 11)
+	[ "$NOTIFY_FROM" = "" ] && NOTIFY_FROM=$(echo "$(hostname)" | sed 's/.local//' | head -c 11)
 
 	[ "$NOTIFY_FROM" = "" ]   && error --from required
 	[ "$NOTIFY_TO" = "" ]     && error --to required
