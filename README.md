@@ -4,7 +4,7 @@ Send sms texts from the command line using nexmo and bash
 
 One line install
 
-	curl -fs https://raw.github.com/mafintosh/dmon/master/install | bash && . $(bashkit rc)
+	curl -fs https://raw.github.com/mafintosh/nexmo-send-text/master/install | bash && . $(bashkit rc)
 
 After installation you should be able to run
 
