@@ -25,6 +25,8 @@ cmd () {
 	[ "$NOTIFY_KEY" = "" ]    && error --key required
 	[ "$NOTIFY_SECRET" = "" ] && error --secret required
 
+	[ "$*" = "" ] && ! opt --defaults && help
+
 	if opt --defaults; then
 		(
 			echo export NOTIFY_FROM=\"$NOTIFY_FROM\"
@@ -35,8 +37,6 @@ cmd () {
 
 		[ "$*" = "" ] && exit 0
 	fi
-
-	[ "$*" = "" ] && help
 
 	OUTPUT=$(curl -fs https://rest.nexmo.com/sms/json -G -X GET \
 		--data-urlencode "api_key=$NOTIFY_KEY" \
