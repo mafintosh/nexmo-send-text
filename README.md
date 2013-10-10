@@ -2,9 +2,9 @@
 
 Send sms texts from the command line using nexmo and bash
 
-One line install
+To install first install [bashkit](https://github.com/mafintosh/bashkit). Then run
 
-	curl -fs https://raw.github.com/mafintosh/nexmo-send-text/master/install | bash && . $(bashkit rc)
+	bashkit install mafintosh/nexmo-send-text --bin send-text
 
 After installation you should be able to run
 
